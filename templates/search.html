@@ -3,27 +3,27 @@
 {% block content %}
     <main class="container">             
         <div class="row g-5">
-            <div class="col-md-8">                
+            <div class="col-md-8">
+                <h4 class="pb-4 mb-4 fst-italic border-bottom text-warning" style="letter-spacing:2px;margin-top:16px;">Search Term : {{ keyword }}</h4>     
                 
+                {% for post in blog %}
                 <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm position-relative">
                     <div class="col p-4 d-flex flex-column position-static">                        
                         <h3 class="mb-0">{{ post }}</h3>                        
                         <div class="mb-1 text-body-secondary">{{ post.created_at | timesince }} ago | {{ post.auther}}</div>
                         <p class="card-text mb-auto">
-                           {{ post.short_desc |linebreaks }}
+                           {{ post.short_desc | truncatewords:35 }}
                         </p>
-
-                        <img src="{{ post.feature_image.url}}">
-                        <p> {{ post.blog_body |linebreaks }}</p>
+                        <a href="{% url 'blog_details' post.slug %}" class="icon-link gap-1 icon-link-hover stretched-link mt-2">
+                            Continue reading
+                            <svg class="bi" aria-hidden="true">
+                                <use xlink:href="#chevron-right"></use>
+                            </svg>
+                        </a>
                     </div>                    
                 </div>
 
-               
-                
-                <!-- <nav class="blog-pagination" aria-label="Pagination">
-                    <a class="btn btn-outline-primary rounded-pill" href="#">Older</a>
-                    <a class="btn btn-outline-secondary rounded-pill disabled" aria-disabled="true">Newer</a>
-                </nav> -->
+                {% endfor%}
             </div>
             <div class="col-md-4">
                 <div class="position-sticky" style="top: 2rem">                    
@@ -45,13 +45,12 @@
                             {% endfor %}                                             
                         </ul>
                     </div>
-                    <div class="p-4">
+                    <div class="p-4">                         
                         <h4 class="fst-italic">Archives</h4>
                         <ol class="list-unstyled mb-0">
                             {% for m in blog_month %}
                              <li><a href="{% url 'blogs_list' m|date:'Y' m|date:'n' %}">{{ m | date:"F Y" }}</a></li>
                             {% endfor %}
-                           
                         </ol>
                     </div>
                     
@@ -59,6 +58,4 @@
             </div>
         </div>
     </main>
-
-
-  {% endblock  %}
+ {% endblock  %}
