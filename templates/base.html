@@ -117,11 +117,19 @@
                     <form action="{% url 'search'  %}" method="get">
                         <div class="input-group">
                             <input type="text" name="keyword" placeholder="Enter Search term..." class="form-control"/>
-                            <button type="submit" class="btn btn-primary">Search</button>
+                            <button type="submit" class="btn btn-outline-warning">Search</button>
                         </div>
-                    </form>&NonBreakingSpace;
+                    </form>&NonBreakingSpace;&NonBreakingSpace;
+                    {% if not user.is_authenticated  %}
                     
-                    <a class="btn btn-sm btn-outline-secondary" href="#">Sign up</a>
+                    <a class="btn btn-outline-warning" href="{% url 'register' %}">Register</a>&NonBreakingSpace;
+                    <a class="btn btn-outline-warning" href="{% url 'login' %}">Login</a>
+
+                    {% else %}
+                            <span>You are logged in as {{ user }}</span>&NonBreakingSpace;
+                            <a class="btn btn-outline-warning" href="{% url 'logout' %}">logout </a>
+                            
+                    {% endif %}
                 </div>
             </div>
         </header>
@@ -133,7 +141,17 @@
                 
             </nav>
         </div>
+
+        {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}  
     </div>
+
+    
 
 
 
