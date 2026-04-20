@@ -7,14 +7,7 @@
     <h3 class="text-center mt-5 text-uppercase text-warning">Login</h3>
     <div class="row">
         <div class="col-3"></div>
-        <div class="col-6">
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-success">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}            
+        <div class="col-6">                     
 
             <form action="{% url 'login' %}" method="POST">
                 {%  csrf_token %}
