@@ -9,7 +9,8 @@ from .models import Category,Blog
 # Register your models here.
 
 class BlogAdmin(admin.ModelAdmin):
-    prepopulated_fields={'slug':('title',)}
+    #prepopulated_fields={'slug':('title',)}
+    readonly_fields = ('slug',)
     list_display=('title','category','auther','status','is_featured')
     search_fields=('id','title','category__category_name','status')
     list_editable=('is_featured','status')

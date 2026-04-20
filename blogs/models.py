@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-
-from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
 
 # Create your models here.
 
@@ -36,4 +35,18 @@ class Blog(models.Model):
     updated_at=models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.title
+        return self.title   
+    
+
+    def save(self, *args, **kwargs):       
+        base_slug = slugify(self.title)
+        slug = base_slug
+        counter = 1
+
+        while Blog.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+            slug = f"{base_slug}-{counter}"
+            counter += 1
+
+        self.slug = slug
+
+        super().save(*args, **kwargs)
