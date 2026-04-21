@@ -37,3 +37,16 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1.25rem;
   color: #727272;
 }
+
+a{
+  color: #ffbf00 !important;
+    /* font-weight: bold; */
+    opacity: 1;
+    text-decoration: none;
+}
+
+.btn:hover {
+    color: black!important;
+    background-color: var(--bs-btn-hover-bg);
+    border-color: var(--bs-btn-hover-border-color);
+}

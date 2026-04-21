@@ -1,6 +1,8 @@
-from django.shortcuts import render,get_object_or_404
-from django.http import HttpResponse
-from blogs.models import Blog
+from django.shortcuts import render,get_object_or_404,redirect
+from django.http import HttpResponseRedirect
+from blogs.models import Blog,Comment
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 # Create your views here.
 
@@ -31,10 +33,26 @@ def blog_details(request,slug):
     # post=Blog.objects.get(slug=slug,status="Published")
     post=get_object_or_404(Blog,slug=slug,status="Published")
     recent_posts=Blog.objects.filter(status="Published").exclude(slug=slug).order_by('-updated_at')[:3]
-    
+
+    if request.method=="POST":
+        comment=Comment()
+        comment.user=request.user
+        comment.blog=post
+        comment.comment=request.POST['comment']
+        comment.save()
+
+        messages.success(request, "Comment Submit Successfully")
+        return HttpResponseRedirect(request.path_info)
+
+    #comment
+    comments=Comment.objects.filter(blog=post).order_by('-updated_at')
+    comments_count=comments.count
+   
     context={
         'post':post,
         'recent_posts':recent_posts,
+        'comments':comments,
+        'comments_count':comments_count
     }    
     return render(request,'blog_details.html',context)
 
@@ -53,5 +71,10 @@ def blogs_list(request,year,month):
         'recent_posts':recent_posts,
     }    
     return render(request,'blogs_list.html',context)
+
+
+
+
+
 
 

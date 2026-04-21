@@ -15,15 +15,61 @@
 
                         <img src="{{ post.feature_image.url}}">
                         <p> {{ post.blog_body |linebreaks }}</p>
-                    </div>                    
-                </div>
 
-               
-                
-                <!-- <nav class="blog-pagination" aria-label="Pagination">
-                    <a class="btn btn-outline-primary rounded-pill" href="#">Older</a>
-                    <a class="btn btn-outline-secondary rounded-pill disabled" aria-disabled="true">Newer</a>
-                </nav> -->
+                        <br>
+                        <div class="form-group">
+                            <h4>Add a comment</h4>
+                            <form method="post" action="">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <textarea name="comment" col="30" class="form-control" rows="5" placeholder="Write your comment "></textarea>
+                                    <input type="submit" value="Submit" class="btn btn-warning mt-1"/>
+                                </div>
+
+                            </form>
+                        </div>
+                        <br>
+
+                        <!-- comments -->
+                        {% if comments %}
+                        <div class="row d-flex">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body p-4">
+                                        <h4 class="mb-4 pb-2">Comments ({{ comments_count }})</h4>
+
+                                        <div class="row" style="max-height: 200px;overflow-y: scroll;">
+                                            {% for comment in comments %}
+                                                <div class="d-flex flex-start mb-3">
+                                                    <i class="fa fa-user-circle rounded-circle shadow-1-strong me-3 fa-2x"></i>
+
+                                                    <div class="flex-grow-1 ms-3">
+                                                        <p class="mb-1">
+                                                            <strong class="text-capitalize">{{ comment.user.username }}</strong>
+                                                            <span class="small text-muted">
+                                                                - {{ comment.created_at|timesince }} ago
+                                                            </span>
+                                                        </p>
+
+                                                        <p class="small mb-2">
+                                                            {{ comment.comment }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <hr class="mb-1" />
+                                            {% endfor %}
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <p>No comments yet. Be the first to comment!</p>
+                        {% endif %}                       
+
+                    </div>                    
+                </div>             
             </div>
             <div class="col-md-4">
                 <div class="position-sticky" style="top: 2rem">                    

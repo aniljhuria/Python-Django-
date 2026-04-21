@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category,Blog
+from .models import Category,Blog,Comment
 
 # from django.contrib import admin
 # from django.contrib.sessions.models import Session
@@ -16,8 +16,14 @@ class BlogAdmin(admin.ModelAdmin):
     list_editable=('is_featured','status')
 
 
+class CommentAdmin(admin.ModelAdmin):    
+    list_display=('comment','blog','user','created_at')
+   
+
+
 admin.site.register(Category)
 admin.site.register(Blog,BlogAdmin)
+admin.site.register(Comment,CommentAdmin)
 
 
 # Session
