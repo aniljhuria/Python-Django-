@@ -28,13 +28,14 @@ def posts_by_category(request,category_id):
 
 
 
-def blog_details(request,slug):    
-     
-    # post=Blog.objects.get(slug=slug,status="Published")
+def blog_details(request,slug): 
     post=get_object_or_404(Blog,slug=slug,status="Published")
     recent_posts=Blog.objects.filter(status="Published").exclude(slug=slug).order_by('-updated_at')[:3]
 
     if request.method=="POST":
+        if not request.user.is_authenticated:
+            messages.error(request, "Please login first for add a  comment")
+            return redirect('login')  # login page ka name
         comment=Comment()
         comment.user=request.user
         comment.blog=post
@@ -61,8 +62,8 @@ def blogs_list(request,year,month):
 
     posts = Blog.objects.filter(
         status="Published",
-        updated_at__year=year,
-        updated_at__month=month
+        created_at__year=year,
+        created_at__month=month
     )
     recent_posts=Blog.objects.filter(status="Published").order_by('-updated_at')[:3]
     
@@ -71,6 +72,9 @@ def blogs_list(request,year,month):
         'recent_posts':recent_posts,
     }    
     return render(request,'blogs_list.html',context)
+
+
+
 
 
 

@@ -19,8 +19,7 @@
                     <tr>
                         <th>#</th>
                         <th>Title</th>
-                        <th>Category</th>
-                        <th>Author</th>
+                        <th>Category</th>                       
                         <th>Status</th>
                         <th>Featured</th>
                         <th>Action</th>
@@ -31,12 +30,11 @@
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ bl }}</td>
-                        <td>{{ bl.category.category_name}}</td>
-                        <td>{{ bl.auther }}</td>
+                        <td>{{ bl.category.category_name}}</td>                        
                         <td>{{ bl.status }}</td>
                         <!-- <td>{{ bl.is_featured }}</td> -->
                         <td>
-                            {% if bl.is_featured %} <i class="fa fa-check text-success"></i> {% else%} 
+                            {% if bl.is_featured %} <i class="fa fa-check text-success"></i> {% else %} 
                             <i class="fa fa-times text-danger"></i> {% endif %}</td>
                         <td>
                             <a href="{% url 'edit_posts' bl.id %}"><i class="fa fa-edit text-success"></i></a>&nbsp;

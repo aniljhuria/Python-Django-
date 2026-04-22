@@ -4,7 +4,7 @@
     <main class="container">             
         <div class="row g-5">
             <div class="col-md-8">
-                <h4 class="pb-4 mb-4 fst-italic border-bottom text-uppercase text-warning" style="letter-spacing:2px;margin-top:16px;">category : {{ posts.0.category.category_name}}</h4>     
+                <h4 class="pb-2 fst-italic border-bottom text-uppercase text-warning" style="letter-spacing:2px;">category : {{ posts.0.category.category_name}}</h4>     
 
                 {% for post in posts %}
                 <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm position-relative">
@@ -33,29 +33,30 @@
             <div class="col-md-4">
                 <div class="position-sticky" style="top: 2rem">                    
                     <div>                      
-                        <h4 class="pb-4 mb-4 fst-italic border-bottom text-uppercase text-warning" style="letter-spacing:2px;margin-top:16px;">Recent posts</h4>     
-                        <ul class="list-unstyled">
-                            {% for post in recent_posts %}
-                            <li>
-                                <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
-                                    href="{% url 'blog_details' post.slug %}">
-                                    
-                                    <img src="{{ post.feature_image.url }}" class="bd-placeholder-img"  width="150px">
-                                    <div class="col-lg-8">
-                                        <h6 class="mb-0">{{ post}}</h6>
-                                        <small class="text-body-secondary">{{ post.updated_at | date:"F Y"  }}</small>
-                                    </div>
-                                </a>
-                            </li>   
-                            {% endfor %}                                             
-                        </ul>
+                        <h4 class="fst-italic  text-uppercase text-warning" style="letter-spacing:2px;">Recent posts</h4>     
+                        {% for post in recent_posts %}
+                            <div class="row border-top mb-2">
+                                <div class="col-lg-4  col-xs-12 gap-3 align-items-start py-3">
+                                    <a class="link-body-emphasis text-decoration-none"
+                                        href="{% url 'blog_details' post.slug %}">                       
+
+                                            <img src="{{ post.feature_image.url }}" class="bd-placeholder-img w-100">
+                                    </a>   
+                                </div>
+                                <div class="col-lg-8 col-xs-12">
+                                    <h6 class="mb-0 mt-1" style="line-height: 23px;">{{ post}}</h6>
+                                    <small class="text-body-secondary ">{{ post.updated_at | timesince  }} ago</small>
+                                </div>                                                      
+                            </div>
+                        {% endfor %}                                             
                     </div>
-                    <div class="p-4">                         
+                    <div class="pt-4 pb-4">
                         <h4 class="fst-italic">Archives</h4>
                         <ol class="list-unstyled mb-0">
                             {% for m in blog_month %}
                              <li><a href="{% url 'blogs_list' m|date:'Y' m|date:'n' %}">{{ m | date:"F Y" }}</a></li>
                             {% endfor %}
+                           
                         </ol>
                     </div>
                     

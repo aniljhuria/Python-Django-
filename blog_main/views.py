@@ -9,13 +9,19 @@ from .forms import RegistrationForm
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import auth
+from django.core.paginator import Paginator
 
 def home(request):
 
     #return HttpResponse('<h2>home page</h2>')
     # categories= Category.objects.all()   
-    featured_posts=Blog.objects.filter(is_featured=True,status="Published").order_by('-updated_at')
-    posts=Blog.objects.filter(is_featured=False,status="Published").order_by('-updated_at')
+    featured_posts=Blog.objects.filter(is_featured=True,status="Published").order_by('updated_at')   
+    posts=Blog.objects.filter(is_featured=False,status="Published").order_by('-updated_at')  
+
+    paginator = Paginator(posts, 4)  # 6 per page
+    page_number = request.GET.get('page')
+    posts = paginator.get_page(page_number)
+    
     try:
         about_us=Aboutus.objects.get()
     except:
@@ -82,5 +88,9 @@ def logout(request):
     auth.logout(request)
     messages.success(request, "Successfully Logout")
     return redirect('home')
+
+
+def custom_403(request, exception):
+    return render(request, '403.html', status=403)
 
     

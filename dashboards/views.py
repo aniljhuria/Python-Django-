@@ -5,6 +5,7 @@ from .forms import CategoryForm,PostsForm,UsersForm,EditUserForm
 from django.contrib import messages
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required, permission_required
 
 # Create your views here.
 
@@ -21,12 +22,14 @@ def dashboard(request):
 
 
 @login_required(login_url='login')
+@permission_required('blogs.view_category', raise_exception=True)
 def categories(request):   
     return render(request,'dashboard/categories.html')
 
 
 
 @login_required(login_url='login')
+@permission_required('blogs.add_category', raise_exception=True)
 def add_category(request):
     if request.method== 'POST':
         form =CategoryForm(request.POST)  
@@ -41,6 +44,7 @@ def add_category(request):
     return render(request,'dashboard/add_category.html',context)
 
 @login_required(login_url='login')
+@permission_required('blogs.edit_category', raise_exception=True)
 def edit_category(request,pk):
     category=get_object_or_404(Category,pk=pk)
 
@@ -57,6 +61,7 @@ def edit_category(request,pk):
     return render(request,'dashboard/edit_category.html',context)
 
 @login_required(login_url='login')
+@permission_required('blogs.delete_category', raise_exception=True)
 def delete_category(request ,pk):
 
     category = get_object_or_404(Category,pk=pk)
@@ -67,7 +72,7 @@ def delete_category(request ,pk):
 # Posts crud 
 @login_required(login_url='login')
 def posts(request):
-    blogs=Blog.objects.all()
+    blogs=Blog.objects.filter(auther=request.user)
     context={
         'blogs':blogs
     }
@@ -80,8 +85,7 @@ def add_posts(request):
         form =PostsForm(request.POST,request.FILES)
         if form.is_valid():  
             post=form.save(commit=False) # temporaily saving the form
-            post.auther=request.user        
-            
+            post.auther=request.user              
             post.save()
             return redirect('posts')
         else:
@@ -101,10 +105,16 @@ def edit_posts(request,pk):
     blog=get_object_or_404(Blog,pk=pk)
 
     if request.method=="POST":
-        form =PostsForm(request.POST,instance=blog)
+        form =PostsForm(request.POST,request.FILES,instance=blog)
+       
         if form.is_valid():
-            form.save()
+                        
+            obj = form.save(commit=False)
+            obj.is_featured = 'is_featured' in request.POST           
+            obj.save()           
             return redirect('posts')
+        else:
+            print("FORM ERRORS ❌", form.errors)
     form=PostsForm(instance=blog) 
     context={
         'form':form,
